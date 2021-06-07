@@ -1,9 +1,11 @@
 import os
 import flask
-from flask import request, jsonify,
+import pandas as pd
+from flask import request, jsonify
 from questions import python
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
+
 app = flask.Flask(__name__)
 CORS(app)
 app.config["DEBUG"] = True
@@ -16,7 +18,9 @@ def allowed_file(filename):
 
 
 def get_csv_rows(filename):
-    return([1, 2, 3, 4, 5])
+    file_path = 'temp_csv/'+filename
+    excel_file = pd.read_excel(file_path)
+    return [x for x in excel_file.columns]
 
 
 @app.route('/api/questions/python', methods=['GET'])
@@ -32,12 +36,14 @@ def api_all():
 @app.route('/api/get-excel-data', methods=['POST'])
 def excel_rows():
     if 'file' not in request.files:
-        resp = jsonify({'message': 'No file part in the request'})
+        resp = jsonify(
+            {'message': 'No file part in the request', 'type': 'warning'})
         resp.status_code = 400
         return resp
     file = request.files['file']
     if file.filename == '':
-        resp = jsonify({'message': 'No file selected for uploading'})
+        resp = jsonify(
+            {'message': 'No file selected for uploading', 'type': 'warning'})
         resp.status_code = 400
         return resp
     if file and allowed_file(file.filename):
@@ -49,7 +55,7 @@ def excel_rows():
         return resp
     else:
         resp = jsonify(
-            {'message': 'Allowed file types are txt, pdf, png, jpg, jpeg, gif'})
+            {'message': 'Please upload a valid file.', 'type': 'error'})
         resp.status_code = 400
         return resp
 
