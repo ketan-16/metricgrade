@@ -13,5 +13,5 @@ python = {
     12: {'question': 'What does [::-1} do?', 'answer': ['reverse the order of an array or a sequence', 'reverse the give list, array, string'], 'type': 'text'},
     13: {'question': 'What are python iterators?', 'answer': ['An iterator is an object that contains a countable number of values', 'An iterator is an object that can be iterated upon', 'Iterator is an object that is used to iterate over iterable objects like lists, tuples, dicts, and sets', 'an object which allows a programmer to traverse through all the elements of a collection', 'An iterator is an object that implements next, which is expected to return the next element of the iterable object that returned it'], 'type': 'text'},
     14: {'question': 'What are docstrings in Python?', 'answer': ['the string literals that appear right after the definition of a function, method, class, or module', 'provide a convenient way of associating documentation with Python modules, functions, classes, and methods', 'a string literal that occurs as the first statement in a module, function, class, or method definition', ''], 'type': 'text'},
-    15: {'question': 'True or False: Python supports Multiple Inheritance?', 'answer': [True], 'type': 'true-flase'}
+    15: {'question': 'True or False: Python supports Multiple Inheritance?', 'answer': [True], 'type': 'true-false'}
 }
