@@ -48,8 +48,9 @@ def excel_rows():
         return resp
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        rows = get_csv_rows(filename)
+        file.save(os.path.join(
+            app.config['UPLOAD_FOLDER'], 'filetorename.xls'))
+        rows = get_csv_rows('filetorename.xls')
         resp = jsonify({'rows': rows})
         resp.status_code = 201
         return resp
@@ -58,6 +59,24 @@ def excel_rows():
             {'message': 'Please upload a valid file.', 'type': 'error'})
         resp.status_code = 400
         return resp
+
+
+@app.route('/api/setfilename', methods=['GET'])
+def set_filename():
+    args = request.args
+    dname = str(args['drivename']+'.xls')
+    src = os.path.join(
+        app.config['UPLOAD_FOLDER'], 'filetorename.xls')
+    dest = os.path.join(
+        app.config['UPLOAD_FOLDER'], dname)
+    try:
+        os.rename(src, dest)
+    except:
+        pass
+    resp = jsonify(
+        {'message': 'File Renamed successfully'})
+    resp.status_code = 200
+    return resp
 
 
 app.run()
