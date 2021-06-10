@@ -2,6 +2,7 @@ import os
 import flask
 import pandas as pd
 from flask import request, jsonify
+from pandas.io import excel
 from questions import python
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
@@ -21,6 +22,26 @@ def get_csv_rows(filename):
     file_path = 'temp_csv/'+filename
     excel_file = pd.read_excel(file_path)
     return [x for x in excel_file.columns]
+
+
+def validate(filename, stu_email, stu_prn):
+    file_path = 'temp_csv/'+filename
+    excel_file = pd.read_excel(file_path)
+    excel_file = excel_file.filter(['PRN', 'Email'])
+    tempdf = excel_file['PRN']
+    for x in tempdf:
+        if isinstance(x, int):
+            stu_prn = int(stu_prn)
+    excel_file = excel_file.loc[excel_file['PRN'] == stu_prn]
+    excel_file = excel_file.loc[excel_file['Email'] == stu_email]
+    # if(excel_file):
+    #     return True
+    # return False
+
+    if(len(excel_file)):
+        # print(excel_file)
+        return True
+    return False
 
 
 @app.route('/api/questions/python', methods=['GET'])
@@ -75,6 +96,19 @@ def set_filename():
         pass
     resp = jsonify(
         {'message': 'File Renamed successfully'})
+    resp.status_code = 200
+    return resp
+
+
+@app.route('/api/validatestudent', methods=['GET'])
+def validate_student():
+    args = request.args
+    stu_email = args['email']
+    filename = args['drivename']
+    stu_prn = args['prn']
+    to_show = validate(filename+'.xls', stu_email, stu_prn)
+    # discord boi
+    resp = jsonify({'show': to_show})
     resp.status_code = 200
     return resp
 
