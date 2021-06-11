@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import smtplib
+import cred
 
 app = flask.Flask(__name__)
 CORS(app)
@@ -46,10 +47,10 @@ def validate(filename, stu_email, stu_prn):
 def send_test_mails(recipients, company_name, start_date, user_name, start_time):
     smtp_ssl_host = 'smtp.gmail.com'  # smtp.mail.yahoo.com
     smtp_ssl_port = 465
-    username = 'exam.metricgrade@gmail.com'
-    password = 'KPSP@1234'
+    username = cred.gmail[0]
+    password = cred.gmail[1]
     sender = 'exam.metricgrade@gmail.com'
-    targets = recipients
+    targets = recipients  # ['ktnydv@gmail.com','test@gmail.com']
 
     msg = MIMEMultipart('alternative')
     msg['Subject'] = '{companyName} - Assesment Scheduled | {startDate}'.format(
