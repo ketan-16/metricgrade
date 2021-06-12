@@ -10,6 +10,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import smtplib
 import cred
+import threading
 
 app = flask.Flask(__name__)
 CORS(app)
@@ -26,6 +27,12 @@ def get_csv_rows(filename):
     file_path = 'temp_csv/'+filename
     excel_file = pd.read_excel(file_path)
     return [x for x in excel_file.columns]
+
+
+def get_col_data(filename):
+    file_path = 'temp_csv/'+filename
+    excel_file = pd.read_excel(file_path)
+    return list(excel_file['Email'])
 
 
 def validate(filename, stu_email, stu_prn):
@@ -137,10 +144,21 @@ def validate_student():
     filename = args['drivename']
     stu_prn = args['prn']
     to_show = validate(filename+'.xls', stu_email, stu_prn)
-    # discord boi
     resp = jsonify({'show': to_show})
     resp.status_code = 200
     return resp
+
+
+def send_test_emails():
+    email_recipients = get_col_data(filename+'.xls')
+    company_name = filename.split('_')[0]
+    start_date = start_date
+    user_name = display_name
+    start_time = start_time
+    send_email_thread = threading.Thread(target=sent_test_mails, args=(
+        email_recipients, company_name, start_date, user_name, start_time,))
+    send_email_thread.start()
+    print('Email Job Started...')
 
 
 app.run()
