@@ -153,7 +153,9 @@ def validate_student():
 @app.route('/api/sendstudentemail', methods=['POST'])
 def send_test_emails():
     record = json.loads(request.data)
-    print(record.to_dict())
+    print(record)
+    # {'start_time': '09:00', 'start_date': '2021-06-22', 'filename': 'Neebal_PM1',
+    #     'end_date': '2021-06-24', 'test_duration': '15 Mins'}
     # email_recipients = get_col_data(filename+'.xls')
     # company_name = filename.split('_')[0]
     # start_date = start_date
@@ -163,6 +165,9 @@ def send_test_emails():
     #     email_recipients, company_name, start_date, user_name, start_time,))
     # send_email_thread.start()
     # print('Email Job Started...')
+    resp = jsonify({'Status': 'OK'})
+    resp.status_code = 200
+    return resp
 
 
 app.run()
