@@ -1,2 +1,4 @@
 __pycache__
 cred.py
+temp_csv/*
+!temp_csv/.gitkeep 
