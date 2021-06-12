@@ -11,6 +11,7 @@ from email.mime.multipart import MIMEMultipart
 import smtplib
 import cred
 import threading
+import json
 
 app = flask.Flask(__name__)
 CORS(app)
@@ -149,16 +150,19 @@ def validate_student():
     return resp
 
 
+@app.route('/api/sendstudentemail', methods=['POST'])
 def send_test_emails():
-    email_recipients = get_col_data(filename+'.xls')
-    company_name = filename.split('_')[0]
-    start_date = start_date
-    user_name = display_name
-    start_time = start_time
-    send_email_thread = threading.Thread(target=sent_test_mails, args=(
-        email_recipients, company_name, start_date, user_name, start_time,))
-    send_email_thread.start()
-    print('Email Job Started...')
+    record = json.loads(request.data)
+    print(record.to_dict())
+    # email_recipients = get_col_data(filename+'.xls')
+    # company_name = filename.split('_')[0]
+    # start_date = start_date
+    # user_name = display_name
+    # start_time = start_time
+    # send_email_thread = threading.Thread(target=sent_test_mails, args=(
+    #     email_recipients, company_name, start_date, user_name, start_time,))
+    # send_email_thread.start()
+    # print('Email Job Started...')
 
 
 app.run()
